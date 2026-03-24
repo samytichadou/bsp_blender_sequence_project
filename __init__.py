@@ -26,14 +26,17 @@ from . import (
     properties,
     addon_preferences,
     gui,
+    op_open_scene,
 )
 
 def register():
     properties.register()
     addon_preferences.register()
     gui.register()
+    op_open_scene.register()
 
 def unregister():
     properties.unregister()
     addon_preferences.unregister()
     gui.unregister()
+    op_open_scene.unregister()

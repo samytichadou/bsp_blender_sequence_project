@@ -1,11 +1,10 @@
 import bpy
 
-
 class BSP_PT_strip_infos(bpy.types.Panel):
     bl_space_type = 'PROPERTIES'
     bl_region_type = 'WINDOW'
     bl_context = "strip"
-    bl_label = "BSP"
+    bl_label = ""
 
     @classmethod
     def poll(cls, context):
@@ -17,15 +16,27 @@ class BSP_PT_strip_infos(bpy.types.Panel):
         elif strip.type=='IMAGE':
             return strip.bsp_properties.is_bsp
 
+    def draw_header(self, context):
+        layout = self.layout
+
+        strip = context.active_strip
+        if strip.type=="SCENE":
+            layout.prop(strip.bsp_properties, "is_bsp", text="BSP")
+        else:
+            layout.label(text="BSP")
+
+        op = layout.operator("BSP_OT_open_scene", icon="SCENE_DATA", text="")
+        op.from_strip = True
+
     def draw(self, context):
         strip = context.active_strip
         props = strip.bsp_properties
 
         layout = self.layout
-        if strip.type=="SCENE":
-            layout.prop(props, "is_bsp")
-        layout.prop(props, "external_filepath")
-        layout.prop(props, "scene_name")
+        layout.enabled = props.is_bsp
+
+        layout.prop(props, "target_scene")
+        layout.prop(props, "render_filepath")
 
 ### REGISTER ---
 def register():
